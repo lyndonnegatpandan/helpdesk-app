@@ -1,0 +1,28 @@
+|===
+|Path|Type|Description
+
+|`+[].id+`
+|`+Number+`
+|Employee id
+
+|`+[].employeeNumber+`
+|`+Number+`
+|Employee Number
+
+|`+[].firstName+`
+|`+String+`
+|First Name
+
+|`+[].middleName+`
+|`+String+`
+|Middle Name
+
+|`+[].lastName+`
+|`+String+`
+|Last Name
+
+|`+[].department+`
+|`+String+`
+|Department
+
+|===

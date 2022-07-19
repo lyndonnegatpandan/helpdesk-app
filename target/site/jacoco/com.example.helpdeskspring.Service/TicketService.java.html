@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TicketService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">helpdesk-spring</a> &gt; <a href="index.source.html" class="el_package">com.example.helpdeskspring.Service</a> &gt; <span class="el_source">TicketService.java</span></div><h1>TicketService.java</h1><pre class="source lang-java linenums">package com.example.helpdeskspring.Service;
+
+
+import com.example.helpdeskspring.Model.Employee;
+import com.example.helpdeskspring.Model.Ticket;
+import com.example.helpdeskspring.Repository.EmployeeRepository;
+import com.example.helpdeskspring.Repository.TicketRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class TicketService {
+    private final TicketRepository ticketRepository;
+    private final EmployeeRepository employeeRepository;
+
+    @Autowired
+<span class="fc" id="L21">    public TicketService(TicketRepository ticketRepository, EmployeeRepository employeeRepository){</span>
+<span class="fc" id="L22">        this.ticketRepository = ticketRepository;</span>
+<span class="fc" id="L23">        this.employeeRepository = employeeRepository;</span>
+
+<span class="fc" id="L25">    }</span>
+    @PreAuthorize(&quot;hasAnyRole('USER', 'ADMIN')&quot;)
+    public List&lt;Ticket&gt; getAllTicket(){
+<span class="fc" id="L28">        return ticketRepository.findAll();</span>
+    }
+    @PreAuthorize(&quot;hasAnyRole('USER', 'ADMIN')&quot;)
+    public Optional&lt;Ticket&gt; getTicketById(long ticket){
+<span class="fc" id="L32">        return ticketRepository.findById(ticket);</span>
+    }
+    @PreAuthorize(&quot;hasRole('ADMIN')&quot;)
+    public Ticket createTicket(Ticket ticket){
+<span class="fc" id="L36">        return ticketRepository.save(ticket);</span>
+    }
+    @PreAuthorize(&quot;hasAnyRole('USER', 'ADMIN')&quot;)
+    public Ticket addAssignee(long ticketId, long id)throws Exception{
+<span class="fc" id="L40">        Ticket ticket = ticketRepository.findById(ticketId).get();</span>
+<span class="fc" id="L41">        Employee employee = employeeRepository.findById(id).get();</span>
+
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if(ticket.getAssignee()!=null){</span>
+<span class="fc" id="L44">            throw new Exception(&quot;There's an employee assigned to this ticket.&quot;);</span>
+        }
+
+<span class="fc" id="L47">        ticket.setAssignee(employee);</span>
+<span class="fc" id="L48">        return ticketRepository.save(ticket);</span>
+    }
+    @PreAuthorize(&quot;hasAnyRole('USER', 'ADMIN')&quot;)
+    public Ticket addWatcher(long ticketId, long id){
+<span class="fc" id="L52">        Ticket ticket = ticketRepository.findById(ticketId).get();</span>
+<span class="fc" id="L53">        Employee employee = employeeRepository.findById(id).get();</span>
+<span class="fc" id="L54">        ticket.getWatcher().add(employee);</span>
+<span class="fc" id="L55">        return ticketRepository.save(ticket);</span>
+    }
+    @PreAuthorize(&quot;hasRole('ADMIN')&quot;)
+    public Boolean deleteTicket(long ticket){
+<span class="fc" id="L59">        ticketRepository.deleteById(ticket);</span>
+<span class="fc" id="L60">        return true;</span>
+    }
+    @PreAuthorize(&quot;hasRole('ADMIN')&quot;)
+    public Ticket updateTicket(long id, Ticket ticket1)throws Exception{
+
+<span class="pc" id="L65">        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -&gt; new Exception(&quot;Ticket not found&quot;));</span>
+<span class="fc" id="L66">        ticket.setTitle(ticket1.getTitle());</span>
+<span class="fc" id="L67">        ticket.setDescription(ticket1.getDescription());</span>
+<span class="fc" id="L68">        ticket.setSeverity(ticket1.getSeverity());</span>
+<span class="fc" id="L69">        ticket.setStatus(ticket1.getStatus());</span>
+
+<span class="fc" id="L71">        final Ticket updatedTicket = ticketRepository.save(ticket);</span>
+
+<span class="fc" id="L73">        return updatedTicket;</span>
+
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

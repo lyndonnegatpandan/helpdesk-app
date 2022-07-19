@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TicketController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">helpdesk-spring</a> &gt; <a href="index.source.html" class="el_package">com.example.helpdeskspring.Controller</a> &gt; <span class="el_source">TicketController.java</span></div><h1>TicketController.java</h1><pre class="source lang-java linenums">package com.example.helpdeskspring.Controller;
+
+
+import com.example.helpdeskspring.Model.Ticket;
+import com.example.helpdeskspring.Service.TicketService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping(&quot;/ticket&quot;)
+public class TicketController {
+    private final TicketService ticketService;
+
+    @Autowired
+<span class="fc" id="L20">    public TicketController(TicketService ticketService){</span>
+<span class="fc" id="L21">        this.ticketService = ticketService;</span>
+<span class="fc" id="L22">    }</span>
+
+    @GetMapping(&quot;/list&quot;)
+    public ResponseEntity&lt;Ticket&gt; getAllTicket(){
+<span class="fc" id="L26">        return new ResponseEntity(ticketService.getAllTicket(), HttpStatus.OK) ;</span>
+    }
+
+    @GetMapping(&quot;{id}&quot;)
+    Optional&lt;Ticket&gt; getTicketById(@PathVariable(&quot;id&quot;)long id){
+<span class="fc" id="L31">        return ticketService.getTicketById(id);</span>
+    }
+
+    @PostMapping(path=&quot;/add&quot;)
+    @ResponseStatus(HttpStatus.CREATED)
+    public Ticket createTicket(@RequestBody Ticket ticket){
+<span class="fc" id="L37">        return ticketService.createTicket(ticket);</span>
+    }
+
+    @PutMapping(path=&quot;/assignee/{ticket}/{id}&quot;)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity&lt;Ticket&gt; addAssignee(@PathVariable(&quot;ticket&quot;)long ticket, @PathVariable(&quot;id&quot;)long id)throws Exception{
+<span class="fc" id="L43">        return ResponseEntity.ok().body(ticketService.addAssignee(ticket, id));</span>
+    }
+
+    @PutMapping(path=&quot;/watcher/{ticket}/{id}&quot;)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity&lt;Ticket&gt; addWatcher(@PathVariable(&quot;ticket&quot;)long ticket, @PathVariable(&quot;id&quot;)long id){
+<span class="fc" id="L49">        return ResponseEntity.ok().body(ticketService.addWatcher(ticket, id));</span>
+    }
+
+    @PutMapping(path=&quot;/update/{ticket}&quot;)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity&lt;Ticket&gt; updateTicket(@PathVariable(value=&quot;ticket&quot;) long ticket, @RequestBody Ticket ticket1) throws Exception{
+<span class="fc" id="L55">        return ResponseEntity.ok().body(ticketService.updateTicket(ticket, ticket1));</span>
+    }
+
+    @DeleteMapping(path=&quot;/delete/{ticket}&quot;)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTicket(@PathVariable(value=&quot;ticket&quot;)long ticket){
+<span class="fc" id="L61">        ticketService.deleteTicket(ticket);</span>
+<span class="fc" id="L62">    }</span>
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

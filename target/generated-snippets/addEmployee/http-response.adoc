@@ -1,0 +1,15 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 201 Created
+Content-Type: application/json
+Content-Length: 153
+
+{
+  "id" : 1,
+  "employeeNumber" : 1222,
+  "firstName" : "Sarah",
+  "middleName" : "Santisima",
+  "lastName" : "Geronimo",
+  "department" : "IT"
+}
+----

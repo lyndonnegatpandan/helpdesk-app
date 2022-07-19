@@ -1,0 +1,12 @@
+[source,bash]
+----
+$ echo '{
+  "id" : 1,
+  "employeeNumber" : 1222,
+  "firstName" : "Sarah",
+  "middleName" : "Santisima",
+  "lastName" : "Geronimo",
+  "department" : "IT"
+}' | http PUT 'http://localhost:8080/employee/update/1' \
+    'Content-Type:application/json'
+----

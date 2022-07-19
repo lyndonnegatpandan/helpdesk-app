@@ -1,0 +1,7 @@
+com\example\helpdeskspring\Service\TicketServiceTest.class
+com\example\helpdeskspring\HelpdeskSpringApplicationTests.class
+com\example\helpdeskspring\Controller\UserControllerTest.class
+com\example\helpdeskspring\Controller\TicketControllerTest.class
+com\example\helpdeskspring\Service\UsersServiceTest.class
+com\example\helpdeskspring\Controller\EmployeeControllerTest.class
+com\example\helpdeskspring\Service\EmployeeServiceTest.class

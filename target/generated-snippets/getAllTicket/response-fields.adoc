@@ -1,0 +1,32 @@
+|===
+|Path|Type|Description
+
+|`+[].ticket+`
+|`+Number+`
+|ticket id
+
+|`+[].title+`
+|`+String+`
+|title of the ticket
+
+|`+[].description+`
+|`+String+`
+|description of the ticket
+
+|`+[].severity+`
+|`+String+`
+|severity of the ticket
+
+|`+[].status+`
+|`+String+`
+|status of the ticket
+
+|`+[].assignee+`
+|`+Null+`
+|employee assigned to the ticket
+
+|`+[].watcher+`
+|`+Array+`
+|watchers of the ticket
+
+|===

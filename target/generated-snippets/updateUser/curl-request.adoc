@@ -1,0 +1,11 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/users/update/0' -i -X PUT \
+    -H 'Content-Type: application/json' \
+    -d '{
+  "userId" : 0,
+  "username" : "admin",
+  "password" : "admin123",
+  "role" : "ADMIN"
+}'
+----

@@ -1,0 +1,14 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/ticket/update/1' -i -X PUT \
+    -H 'Content-Type: application/json' \
+    -d '{
+  "ticket" : 1,
+  "title" : "First Ticket",
+  "description" : "This is the first ticket.",
+  "severity" : "Major",
+  "status" : "New",
+  "assignee" : null,
+  "watcher" : [ ]
+}'
+----

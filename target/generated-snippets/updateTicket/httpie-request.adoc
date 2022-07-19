@@ -1,0 +1,13 @@
+[source,bash]
+----
+$ echo '{
+  "ticket" : 1,
+  "title" : "First Ticket",
+  "description" : "This is the first ticket.",
+  "severity" : "Major",
+  "status" : "New",
+  "assignee" : null,
+  "watcher" : [ ]
+}' | http PUT 'http://localhost:8080/ticket/update/1' \
+    'Content-Type:application/json'
+----

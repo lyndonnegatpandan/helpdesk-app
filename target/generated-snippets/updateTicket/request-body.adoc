@@ -1,0 +1,12 @@
+[source,options="nowrap"]
+----
+{
+  "ticket" : 1,
+  "title" : "First Ticket",
+  "description" : "This is the first ticket.",
+  "severity" : "Major",
+  "status" : "New",
+  "assignee" : null,
+  "watcher" : [ ]
+}
+----

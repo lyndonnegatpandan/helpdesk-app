@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Ticket.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">helpdesk-spring</a> &gt; <a href="index.source.html" class="el_package">com.example.helpdeskspring.Model</a> &gt; <span class="el_source">Ticket.java</span></div><h1>Ticket.java</h1><pre class="source lang-java linenums">package com.example.helpdeskspring.Model;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+
+@Entity
+@Table(name=&quot;ticket&quot;)
+public class Ticket {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long ticket;
+
+    @Column(name = &quot;title&quot;)
+    private String title;
+
+    @Column(name = &quot;description&quot;)
+    private String description;
+
+    @Column(name = &quot;severity&quot;)
+    private Severity severity;
+
+    @Column(name = &quot;status&quot;)
+    private Status status;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = &quot;assigneeId&quot;, insertable = true, updatable = true)
+    private Employee assignee;
+
+<span class="fc" id="L32">    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})</span>
+    @JoinTable(name = &quot;ticket_watcher&quot;, joinColumns = {@JoinColumn(name=&quot;ticket_id&quot;)}, inverseJoinColumns = {@JoinColumn(name=&quot;id&quot;)})
+    private List &lt;Employee&gt; watcher = new ArrayList&lt;&gt;();
+
+    public Ticket(){
+<span class="fc" id="L37">        super();</span>
+<span class="fc" id="L38">    }</span>
+
+    public Ticket(String title, String description, Severity severity, Status status){
+<span class="fc" id="L41">        super();</span>
+<span class="fc" id="L42">        this.title = title;</span>
+<span class="fc" id="L43">        this.description = description;</span>
+<span class="fc" id="L44">        this.severity = severity;</span>
+<span class="fc" id="L45">        this.status = status;</span>
+<span class="fc" id="L46">    }</span>
+
+    public long getTicket(){
+<span class="fc" id="L49">        return ticket;</span>
+    }
+
+    public void setTicket(Long ticket){
+<span class="fc" id="L53">        this.ticket = ticket;</span>
+<span class="fc" id="L54">    }</span>
+
+    public String getTitle(){
+<span class="fc" id="L57">        return title;</span>
+    }
+
+    public void setTitle(String title){
+<span class="fc" id="L61">        this.title = title;</span>
+<span class="fc" id="L62">    }</span>
+
+    public String getDescription(){
+<span class="fc" id="L65">        return description;</span>
+    }
+
+    public void setDescription(String description){
+<span class="fc" id="L69">        this.description = description;</span>
+<span class="fc" id="L70">    }</span>
+
+    public Severity getSeverity(){
+<span class="fc" id="L73">        return severity;</span>
+    }
+
+    public void setSeverity(Severity severity){
+<span class="fc" id="L77">        this.severity = severity;</span>
+<span class="fc" id="L78">    }</span>
+
+    public Status getStatus(){
+<span class="fc" id="L81">        return status;</span>
+    }
+
+    public void setStatus(Status status){
+<span class="fc" id="L85">        this.status = status;</span>
+<span class="fc" id="L86">    }</span>
+
+    public Employee getAssignee(){
+<span class="fc" id="L89">        return assignee;</span>
+    }
+
+    public void setAssignee(Employee assignee){
+<span class="fc" id="L93">        this.assignee = assignee;</span>
+<span class="fc" id="L94">    }</span>
+
+    public List&lt;Employee&gt; getWatcher(){
+<span class="fc" id="L97">        return watcher;</span>
+    }
+
+    public void setWatcher(List&lt;Employee&gt; watcher){
+<span class="fc" id="L101">        this.watcher = watcher;</span>
+<span class="fc" id="L102">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

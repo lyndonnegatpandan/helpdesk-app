@@ -1,0 +1,9 @@
+[source,options="nowrap"]
+----
+[ {
+  "userId" : 0,
+  "username" : "admin",
+  "password" : "admin123",
+  "role" : "ADMIN"
+} ]
+----

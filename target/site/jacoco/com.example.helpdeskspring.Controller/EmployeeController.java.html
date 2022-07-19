@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmployeeController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">helpdesk-spring</a> &gt; <a href="index.source.html" class="el_package">com.example.helpdeskspring.Controller</a> &gt; <span class="el_source">EmployeeController.java</span></div><h1>EmployeeController.java</h1><pre class="source lang-java linenums">package com.example.helpdeskspring.Controller;
+
+
+import com.example.helpdeskspring.Model.Employee;
+import com.example.helpdeskspring.Repository.EmployeeRepository;
+import com.example.helpdeskspring.Service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
+
+@RestController
+@RequestMapping(&quot;/employee&quot;)
+public class EmployeeController {
+
+
+    private final EmployeeService employeeService;
+
+    private final EmployeeRepository employeeRepository;
+
+
+    @Autowired
+<span class="fc" id="L25">    public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository){</span>
+<span class="fc" id="L26">        this.employeeService = employeeService;</span>
+<span class="fc" id="L27">        this.employeeRepository = employeeRepository;</span>
+<span class="fc" id="L28">    }</span>
+    //
+    @GetMapping(&quot;/list&quot;)
+    public ResponseEntity&lt;Employee&gt; getEmployees(){
+<span class="fc" id="L32">        return new ResponseEntity(employeeService.getEmployees(), HttpStatus.OK);</span>
+    }
+
+
+    @PostMapping(&quot;/add&quot;)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity &lt;Employee&gt; addEmployee(@RequestBody Employee employee){
+<span class="fc" id="L39">        return new ResponseEntity(employeeService.createEmployee(employee), HttpStatus.CREATED);</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    Optional&lt;Employee&gt; getEmployeeById(@PathVariable(&quot;id&quot;)long id){
+<span class="fc" id="L44">        return employeeService.getEmployeeById(id);</span>
+    }
+
+
+    @PutMapping(path=&quot;/update/{id}&quot;)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity&lt;Employee&gt; updateEmployee(@PathVariable(value=&quot;id&quot;) long id, @RequestBody Employee employee1) throws Exception {
+<span class="fc" id="L51">        return new ResponseEntity&lt;&gt;(employeeService.updateEmployee(id, employee1), HttpStatus.OK);</span>
+    }
+
+    @DeleteMapping(path = &quot;/delete/{id}&quot;)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable(value=&quot;id&quot;)long id)throws Exception{
+<span class="fc" id="L57">        employeeService.deleteEmployee(id);</span>
+<span class="fc" id="L58">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

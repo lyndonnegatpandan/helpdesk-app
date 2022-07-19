@@ -1,0 +1,20 @@
+|===
+|Path|Type|Description
+
+|`+userId+`
+|`+Number+`
+|Unique id of the user
+
+|`+username+`
+|`+String+`
+|Username of the user
+
+|`+password+`
+|`+String+`
+|Password to access the system
+
+|`+role+`
+|`+String+`
+|Role of the user(Admin or User)
+
+|===

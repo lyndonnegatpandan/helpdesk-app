@@ -1,0 +1,5 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/ticket/assignee/1/0' -i -X PUT \
+    -H 'Content-Type: application/json'
+----

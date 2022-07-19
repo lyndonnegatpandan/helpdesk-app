@@ -1,0 +1,13 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/employee/add' -i -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{
+  "id" : 1,
+  "employeeNumber" : 1222,
+  "firstName" : "Sarah",
+  "middleName" : "Santisima",
+  "lastName" : "Geronimo",
+  "department" : "IT"
+}'
+----

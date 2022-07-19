@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">helpdesk-spring</a> &gt; <a href="index.source.html" class="el_package">com.example.helpdeskspring.Security</a> &gt; <span class="el_source">SecurityConfiguration.java</span></div><h1>SecurityConfiguration.java</h1><pre class="source lang-java linenums">package com.example.helpdeskspring.Security;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
+
+    private UserPrincipalDetailsService userPrincipalDetailsService;
+
+<span class="fc" id="L25">    public SecurityConfiguration(UserPrincipalDetailsService userPrincipalDetailsService){</span>
+<span class="fc" id="L26">        this.userPrincipalDetailsService = userPrincipalDetailsService;</span>
+<span class="fc" id="L27">    }</span>
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth){
+<span class="fc" id="L31">        auth.authenticationProvider(authenticationProvider());</span>
+
+<span class="fc" id="L33">    }</span>
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+<span class="fc" id="L37">        http</span>
+<span class="fc" id="L38">                .csrf().disable()</span>
+<span class="fc" id="L39">                .authorizeRequests()</span>
+<span class="fc" id="L40">                .antMatchers(&quot;/**/add&quot;).hasRole(&quot;ADMIN&quot;)</span>
+<span class="fc" id="L41">                .antMatchers(&quot;/employee/update/**&quot;, &quot;/employee/delete/**&quot;, &quot;/ticket/update/**&quot;, &quot;/ticket/delete/**&quot;, &quot;**/assignee/**&quot;).hasRole(&quot;ADMIN&quot;)</span>
+<span class="fc" id="L42">                .antMatchers(&quot;/users/update/**&quot;, &quot;/users/delete/**&quot;,&quot;/users/add&quot;).hasRole(&quot;ADMIN&quot;)</span>
+<span class="fc" id="L43">                .antMatchers(&quot;/**/list&quot;,&quot;users/list&quot;).hasAnyRole(&quot;ADMIN&quot;, &quot;USER&quot;)</span>
+<span class="fc" id="L44">                .and()</span>
+<span class="fc" id="L45">                .httpBasic();</span>
+<span class="fc" id="L46">    }</span>
+
+
+
+    @Bean
+    DaoAuthenticationProvider authenticationProvider(){
+<span class="fc" id="L52">        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();</span>
+<span class="fc" id="L53">        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());</span>
+<span class="fc" id="L54">        daoAuthenticationProvider.setUserDetailsService(this.userPrincipalDetailsService);</span>
+
+<span class="fc" id="L56">        return daoAuthenticationProvider;</span>
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder(){
+<span class="fc" id="L61">        return new BCryptPasswordEncoder();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

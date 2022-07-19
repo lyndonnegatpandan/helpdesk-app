@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsersService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">helpdesk-spring</a> &gt; <a href="index.source.html" class="el_package">com.example.helpdeskspring.Service</a> &gt; <span class="el_source">UsersService.java</span></div><h1>UsersService.java</h1><pre class="source lang-java linenums">package com.example.helpdeskspring.Service;
+
+
+import com.example.helpdeskspring.Model.Users;
+import com.example.helpdeskspring.Repository.UsersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class UsersService {
+    private final UsersRepository usersRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+<span class="fc" id="L19">    public UsersService(UsersRepository usersRepository, PasswordEncoder passwordEncoder){</span>
+<span class="fc" id="L20">        this.usersRepository = usersRepository;</span>
+<span class="fc" id="L21">        this.passwordEncoder = passwordEncoder;</span>
+<span class="fc" id="L22">    }</span>
+    @PreAuthorize(&quot;hasAnyRole('USER', 'ADMIN')&quot;)
+    public List&lt;Users&gt; getUsers(){
+<span class="fc" id="L25">        return usersRepository.findAll();</span>
+    }
+    @PreAuthorize(&quot;hasRole('ADMIN')&quot;)
+    public Users createUser(Users users){
+<span class="fc" id="L29">        users.setPassword(passwordEncoder.encode(users.getPassword()));</span>
+<span class="fc" id="L30">        return usersRepository.save(users);</span>
+    }
+    @PreAuthorize(&quot;hasRole('ADMIN')&quot;)
+    public Users updateUser(long userId, Users user1) throws Exception{
+<span class="pc" id="L34">        Users users = usersRepository.findById(userId).orElseThrow(() -&gt; new Exception(&quot;User not found&quot;));</span>
+<span class="fc" id="L35">        users.setUsername(user1.getUsername());</span>
+<span class="fc" id="L36">        users.setPassword(user1.getPassword());</span>
+<span class="fc" id="L37">        users.setRole(user1.getRole());</span>
+
+<span class="fc" id="L39">        final Users updatedUser = usersRepository.save(users);</span>
+
+<span class="fc" id="L41">        return updatedUser;</span>
+    }
+    @PreAuthorize(&quot;hasRole('ADMIN')&quot;)
+    public Boolean deleteUser(long userId) throws Exception {
+<span class="fc" id="L45">        Users users = usersRepository.findById(userId).get();</span>
+<span class="fc" id="L46">        usersRepository.deleteById(userId);</span>
+<span class="fc" id="L47">        return true;</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

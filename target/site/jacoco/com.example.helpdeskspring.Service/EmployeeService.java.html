@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmployeeService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">helpdesk-spring</a> &gt; <a href="index.source.html" class="el_package">com.example.helpdeskspring.Service</a> &gt; <span class="el_source">EmployeeService.java</span></div><h1>EmployeeService.java</h1><pre class="source lang-java linenums">package com.example.helpdeskspring.Service;
+
+import com.example.helpdeskspring.Model.Employee;
+import com.example.helpdeskspring.Repository.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+
+
+    @Autowired
+<span class="fc" id="L23">    public EmployeeService(EmployeeRepository employeeRepository){</span>
+<span class="fc" id="L24">        this.employeeRepository = employeeRepository;</span>
+<span class="fc" id="L25">    }</span>
+
+    @PreAuthorize(&quot;hasAnyRole('USER', 'ADMIN')&quot;)
+    public List&lt;Employee&gt; getEmployees(){
+<span class="fc" id="L29">        return employeeRepository.findAll();</span>
+    }
+
+//    public List&lt;Employee&gt; view(long employeeNumber){
+//        List&lt;Employee&gt; viewByEmployeeNumber = new ArrayList&lt;&gt;();
+//        Employee employee = employeeRepository.findByEmployeeNumber(employeeNumber);
+//        viewByEmployeeNumber.add(employee);
+//        return viewByEmployeeNumber;
+//    }
+
+    @PreAuthorize(&quot;hasRole('ADMIN')&quot;)
+    public Employee createEmployee(Employee employee){
+<span class="fc" id="L41">        return employeeRepository.save(employee);</span>
+    }
+
+    public Optional&lt;Employee&gt; getEmployeeById(long id){
+<span class="fc" id="L45">        return employeeRepository.findById(id);</span>
+    }
+    @PreAuthorize(&quot;hasRole('ADMIN')&quot;)
+    public Employee updateEmployee(long id, Employee employee1)throws Exception{
+
+<span class="pc" id="L50">        Employee employee = employeeRepository.findById(id).orElseThrow(() -&gt; new Exception(&quot;Employee not found&quot;));</span>
+<span class="fc" id="L51">        employee.setEmployeeNumber(employee1.getEmployeeNumber());</span>
+<span class="fc" id="L52">        employee.setFirstName(employee1.getFirstName());</span>
+<span class="fc" id="L53">        employee.setMiddleName(employee1.getMiddleName());</span>
+<span class="fc" id="L54">        employee.setLastName(employee1.getLastName());</span>
+<span class="fc" id="L55">        employee.setDepartment(employee1.getDepartment());</span>
+
+<span class="fc" id="L57">        final Employee updatedEmployee = employeeRepository.save(employee);</span>
+
+<span class="fc" id="L59">        return updatedEmployee;</span>
+    }
+    @PreAuthorize(&quot;hasRole('ADMIN')&quot;)
+    public Boolean deleteEmployee(long id)throws Exception{
+<span class="fc" id="L63">        Employee employee = employeeRepository.findById(id).get();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if(employee.getTicketAssigned()==null){</span>
+<span class="fc" id="L65">            employeeRepository.deleteById(id);</span>
+
+        }else{
+<span class="fc" id="L68">            throw new Exception(&quot;Employee currently assigned.&quot;);</span>
+        }
+<span class="fc" id="L70">        return true;</span>
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

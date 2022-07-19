@@ -1,0 +1,5 @@
+[source,bash]
+----
+$ http PUT 'http://localhost:8080/ticket/watcher/1/0' \
+    'Content-Type:application/json'
+----
