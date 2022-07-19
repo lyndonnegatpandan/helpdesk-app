@@ -17,12 +17,12 @@ import java.util.List;
 public class UserController {
     private final UsersService usersService;
 
-//    private final UsersRepository usersRepository;
+
 
     @Autowired
     public UserController(UsersService usersService){
         this.usersService = usersService;
-        //this.usersRepository=usersRepository;
+
     }
 
     @GetMapping("/list")

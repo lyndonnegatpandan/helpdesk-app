@@ -29,12 +29,6 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-//    public List<Employee> view(long employeeNumber){
-//        List<Employee> viewByEmployeeNumber = new ArrayList<>();
-//        Employee employee = employeeRepository.findByEmployeeNumber(employeeNumber);
-//        viewByEmployeeNumber.add(employee);
-//        return viewByEmployeeNumber;
-//    }
 
     @PreAuthorize("hasRole('ADMIN')")
     public Employee createEmployee(Employee employee){
@@ -59,13 +53,15 @@ public class EmployeeService {
         return updatedEmployee;
     }
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteEmployee(long id)throws Exception{
+    public Boolean deleteEmployee(long id)throws Exception{
         Employee employee = employeeRepository.findById(id).get();
         if(employee.getTicketAssigned()==null){
             employeeRepository.deleteById(id);
+
         }else{
             throw new Exception("Employee currently assigned.");
         }
+        return true;
 
     }
 

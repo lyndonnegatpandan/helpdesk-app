@@ -11,14 +11,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -45,7 +47,7 @@ class TicketServiceTest {
     @Test
     void getTicketById() {
         Ticket ticket = new Ticket("First Ticket", "This is the first ticket.", Severity.Major, Status.New);
-        when(ticketRepository.findById(ticket.getTicket())).thenReturn(Optional.of(ticket));
+        given(ticketRepository.findById(ticket.getTicket())).willReturn(Optional.of(ticket));
         ticketServiceTest.getTicketById(ticket.getTicket());
         verify(ticketRepository).findById(ticket.getTicket());
     }
@@ -64,8 +66,8 @@ class TicketServiceTest {
     void addAssignee() throws Exception {
         Employee employee = new Employee(1222, "Sarah", "Santisima", "Geronimo", Department.valueOf("IT"), null,null);
         Ticket ticket = new Ticket("First Ticket", "This is the first ticket.", Severity.Major, Status.New);
-        when(ticketRepository.findById(ticket.getTicket())).thenReturn(Optional.of(ticket));
-        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
+        given(ticketRepository.findById(ticket.getTicket())).willReturn(Optional.of(ticket));
+        given(employeeRepository.findById(employee.getId())).willReturn(Optional.of(employee));
         ticketServiceTest.addAssignee(ticket.getTicket(), employee.getId());
         verify(ticketRepository).save(ticket);
         assertEquals(employee.getEmployeeNumber(), ticket.getAssignee().getEmployeeNumber());
@@ -76,8 +78,8 @@ class TicketServiceTest {
     void addWatcher() {
         Employee employee = new Employee(1222, "Sarah", "Santisima", "Geronimo", Department.valueOf("IT"), null,null);
         Ticket ticket = new Ticket("First Ticket", "This is the first ticket.", Severity.Major, Status.New);
-        when(ticketRepository.findById(ticket.getTicket())).thenReturn(Optional.of(ticket));
-        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
+        given(ticketRepository.findById(ticket.getTicket())).willReturn(Optional.of(ticket));
+        given(employeeRepository.findById(employee.getId())).willReturn(Optional.of(employee));
         ticketServiceTest.addWatcher(ticket.getTicket(), employee.getId());
         verify(ticketRepository).save(ticket);
     }
@@ -85,14 +87,27 @@ class TicketServiceTest {
     @Test
     void deleteTicket() throws Exception{
         Ticket ticket = new Ticket("First Ticket", "This is the first ticket.", Severity.Major, Status.New);
-        ticketServiceTest.deleteTicket(ticket.getTicket());
+        Boolean test = ticketServiceTest.deleteTicket(ticket.getTicket());
         verify(ticketRepository).deleteById(ticket.getTicket());
+        assertTrue(test);
+    }
+
+    @Test
+    void addAssigneeTicketException(){
+        Employee employee = new Employee(1222, "Sarah", "Santisima", "Geronimo", Department.valueOf("IT"), null,null);
+        Ticket ticket = new Ticket("First Ticket", "This is the first ticket.", Severity.Major, Status.New);
+        ticket.setAssignee(employee);
+        given(ticketRepository.findById(any())).willReturn(Optional.of(ticket));
+        given(employeeRepository.findById(any())).willReturn(Optional.of(employee));
+        assertThatThrownBy(()-> ticketServiceTest.addAssignee(ticket.getTicket(), employee.getId()))
+                .hasMessage("There's an employee assigned to this ticket.");
+        verify(ticketRepository, never()).save(any());
     }
 
     @Test
     void updateTicket() throws Exception{
         Ticket ticket = new Ticket("First Ticket", "This is the first ticket.", Severity.Major, Status.New);
-        when(ticketRepository.findById(ticket.getTicket())).thenReturn(Optional.of(ticket));
+        given(ticketRepository.findById(ticket.getTicket())).willReturn(Optional.of(ticket));
         ticketServiceTest.updateTicket(ticket.getTicket(), ticket);
         verify(ticketRepository).save(ticket);
     }

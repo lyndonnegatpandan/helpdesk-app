@@ -83,8 +83,9 @@ class EmployeeControllerTest {
     @WithMockUser(username = "admin", password = "admin123", roles = "ADMIN")
     void getEmployees() throws Exception{
         Employee employee = new Employee(1222, "Sarah", "Santisima", "Geronimo", Department.valueOf("IT"), null,null);
+        employee.setId(1L);
         List<Employee> allEmployee = Arrays.asList(employee);
-        when(employeeService.getEmployees()).thenReturn(allEmployee);
+        given(employeeService.getEmployees()).willReturn(allEmployee);
         mockMvc.perform(get("/employee/list")
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isOk())
@@ -109,6 +110,7 @@ class EmployeeControllerTest {
     @WithMockUser(username = "admin", password = "admin123", roles = "ADMIN")
     void addEmployee() throws Exception {
           Employee employee = new Employee(1222, "Sarah", "Santisima", "Geronimo", Department.valueOf("IT"), null,null);
+          employee.setId(1L);
           given(employeeService.createEmployee(any())).willReturn(employee);
           mockMvc.perform(post("/employee/add")
                           .contentType(MediaType.APPLICATION_JSON)
@@ -133,6 +135,7 @@ class EmployeeControllerTest {
     @WithMockUser(username = "admin", password = "admin123", roles = "ADMIN")
     void getEmployeeById() throws Exception {
         Employee employee = new Employee(1222, "Sarah", "Santisima", "Geronimo", Department.valueOf("IT"), null,null);
+        employee.setId(1L);
         given(employeeService.getEmployeeById(employee.getId())).willReturn(Optional.of(employee));
         mockMvc.perform(get("/employee/"+employee.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -182,8 +185,9 @@ class EmployeeControllerTest {
     @WithMockUser(username = "admin", password = "admin123", roles = "ADMIN")
     void deleteEmployee() throws Exception {
         Employee employee = new Employee(1222, "Sarah", "Santisima", "Geronimo", Department.valueOf("IT"), null,null);
-        doNothing().when(employeeService).deleteEmployee(employee.getId());
-        mockMvc.perform(RestDocumentationRequestBuilders.delete("/employee/delete/"+employee.getId())
+        employee.setId(1L);
+        given(employeeService.deleteEmployee(anyInt())).willReturn(true);
+        mockMvc.perform(delete("/employee/delete/"+employee.getId())
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isNoContent())
                 .andDo(document("{methodName}", preprocessRequest(prettyPrint())));
@@ -195,10 +199,12 @@ class EmployeeControllerTest {
         assertNotNull(mockMvc);
     }
 
-    public static byte[] toJson(Object object) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return mapper.writeValueAsBytes(object);
+    public static String toJson(final Object obj){
+        try{
+            return new ObjectMapper().writeValueAsString(obj);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
 }

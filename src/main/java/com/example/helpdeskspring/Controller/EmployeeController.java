@@ -5,15 +5,10 @@ import com.example.helpdeskspring.Model.Employee;
 import com.example.helpdeskspring.Repository.EmployeeRepository;
 import com.example.helpdeskspring.Service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
-
-
-import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -37,11 +32,6 @@ public class EmployeeController {
         return new ResponseEntity(employeeService.getEmployees(), HttpStatus.OK);
     }
 
-//    @GetMapping("/view/{employeeNumber}")
-//    public ResponseEntity<Employee> getEmployee(@PathVariable(value="employeeNumber")long employeeNumber,@RequestBody Employee employee){
-//        employeeNumber = employee.getEmployeeNumber();
-//        return new ResponseEntity(employeeService.view(employeeNumber),HttpStatus.OK);
-//    }
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
@@ -52,7 +42,6 @@ public class EmployeeController {
     @GetMapping("/{id}")
     Optional<Employee> getEmployeeById(@PathVariable("id")long id){
         return employeeService.getEmployeeById(id);
-
     }
 
 

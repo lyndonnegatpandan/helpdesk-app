@@ -76,7 +76,7 @@ class UserControllerTest {
     void getUsers() throws Exception{
         Users users= new Users("admin","admin123","ADMIN");
         List<Users> allUsers= Arrays.asList(users);
-        when(usersService.getUsers()).thenReturn(allUsers);
+        given(usersService.getUsers()).willReturn(allUsers);
         mockMvc.perform(get("/users/list")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -138,7 +138,7 @@ class UserControllerTest {
     @WithMockUser(username = "admin", password = "admin123", roles = "ADMIN")
     void deleteUser() throws Exception{
         Users users= new Users("admin","admin123","ADMIN");
-        doNothing().when(usersService).deleteUser(users.getUserId());
+        given(usersService.deleteUser(anyInt())).willReturn(true);
         mockMvc.perform(delete("/users/delete/"+users.getUserId())
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isNoContent())

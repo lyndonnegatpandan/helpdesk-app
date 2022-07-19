@@ -55,8 +55,9 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteTicket(long ticket){
+    public Boolean deleteTicket(long ticket){
         ticketRepository.deleteById(ticket);
+        return true;
     }
     @PreAuthorize("hasRole('ADMIN')")
     public Ticket updateTicket(long id, Ticket ticket1)throws Exception{
@@ -72,8 +73,6 @@ public class TicketService {
         return updatedTicket;
 
     }
-
-
 
 
 }
